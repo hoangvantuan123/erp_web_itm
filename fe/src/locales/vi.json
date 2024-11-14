@@ -1,0 +1,61 @@
+{
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
+  },
+  "common": {
+    "welcome": "Chào mừng bạn đến với trang web của chúng tôi!",
+    "buttonLabel": "Nhấn vào tôi"
+  },
+  "greetings": {
+    "hello": "Xin chào",
+    "goodMorning": "Chào buổi sáng",
+    "goodAfternoon": "Chào buổi chiều"
+  },
+  "page_setting": {
+    "helmet_setting": "Cài đặt"
+  },
+  "page_login": {
+    "login": "Đăng nhập"
+  },
+  "side_bar": {
+    "setting": "Cài đặt hệ thống",
+    "general_settings": "Thiết lập chung",
+    "users": "Người dùng",
+    "groups_users": "Nhóm người dùng",
+    "technique_access": "Quyền truy cập",
+    "technique_menu": "Mục Menu",
+    "home": "Trang chủ",
+    "technique": "Kỹ thuật",
+    "work": "Công việc",
+    "time_tracking": "Dữ liệu công theo ngày",
+    "payroll": "Dữ liệu công theo tháng",
+    "notifications": "Thông báo",
+    "recruitment": "Tuyển dụng",
+    "data_recruitment": "Danh sách nhân sự",
+    "salary": "Dữ liệu chấm công",
+    "import": "Import"
+  },
+  "column_table": {
+    "CID": "CID",
+    "name_user": "Tên",
+    "login": "Đăng nhập",
+    "language": "Ngôn ngữ",
+    "active": "Trạng thái",
+    "success": "Đã kết nối",
+    "error": "Chưa kêt nối",
+    "default": "Chưa xác định",
+    "name_group": "Tên nhóm",
+    "add_row": "Thêm hàng mới",
+    "action": "Action",
+    "sequence": "Trình tự",
+    "name": "Menu",
+    "key_name": "Key",
+    "parent_name": "Menu cha",
+    "total": "Tổng",
+    "item": "Mục",
+    "parent_path": "Parent Path",
+    "check_pass": "Trạng thái mật khẩu"
+  }
+
+}

@@ -1,0 +1,64 @@
+{
+    "auth": {
+        "login": "Log in",
+        "register": "Register"
+    },
+    "common": {
+        "welcome": "Welcome to our website!",
+        "buttonLabel": "Click me"
+    },
+    "greetings": {
+        "hello": "Hello",
+        "goodMorning": "Good morning",
+        "goodAfternoon": "Good afternoon"
+    },
+    "page_setting": {
+        "helmet_setting": "Setting"
+    },
+    "page_login": {
+        "login": "Log in"
+    },
+    "side_bar": {
+        "setting": "System settings",
+        "general_settings": "General settings",
+        "users": "User",
+        "groups_users": "User group",
+        "technique_access": "Access",
+        "technique_menu": "Section menu",
+        "home": "Home",
+        "technique": "Technique",
+        "work": "Job",
+        "time_tracking": "Daily attendance data",
+        "payroll": "Monthly attendance data",
+        "notifications": "Notification",
+        "recruitment": "Recruitment",
+        "data_recruitment": "List of personnel",
+        "salary": "Timekeeping data",
+        "import": "Import",
+        "payroll_me": "Personal payroll",
+        "payrolls": "Payroll data",
+        "time_tracking_total": "General time sheet"
+    },
+    "column_table": {
+        "CID": "CID",
+        "name_user": "Name",
+        "login": "Login",
+        "language": "Language",
+        "active": "Status",
+        "success": "Connected",
+        "error": "Not Connected",
+        "default": "Undefined",
+        "name_group": "Group Name",
+        "add_row": "Add New Row",
+        "action": "Action",
+        "sequence": "Sequence",
+        "name": "Menu",
+        "key_name": "Key",
+        "parent_name": "Parent Menu",
+        "total": "Total",
+        "item": "Item",
+        "parent_path": "Parent Path"
+    }
+
+
+}

@@ -1,0 +1,62 @@
+{
+    "auth": {
+        "login": "로그인하십시오",
+        "register": "등록하다"
+    },
+    "common": {
+        "welcome": "당사 웹 사이트에 오신 것을 환영합니다!",
+        "buttonLabel": "나를 클릭하십시오"
+    },
+    "greetings": {
+        "hello": "안녕하세요",
+        "goodMorning": "좋은 아침이에요",
+        "goodAfternoon": "좋은 오후에요"
+    },
+    "page_setting": {
+        "helmet_setting": "환경"
+    },
+    "page_login": {
+        "login": "로그인하십시오"
+    },
+    "side_bar": {
+        "setting": "시스템 설정",
+        "general_settings": "일반적인 설정",
+        "users": "사용자",
+        "groups_users": "사용자 그룹",
+        "technique_access": "입장",
+        "technique_menu": "섹션 메뉴",
+        "home": "집",
+        "technique": "기술",
+        "work": "직업",
+        "time_tracking": "일일 근무 데이터",
+        "payroll": "월간 근무 데이터",
+        "notifications": "공고",
+        "recruitment": "신병 모집",
+        "data_recruitment": "인원 목록",
+        "salary": "시간 관리 데이터",
+        "import": "수입"
+    },
+    "column_table": {
+        "CID": "CID",
+        "name_user": "이름",
+        "login": "로그인",
+        "language": "언어",
+        "active": "상태",
+        "success": "연결 완료",
+        "error": "연결되지 않음",
+        "default": "미정",
+        "name_group": "그룹 이름",
+        "add_row": "새 행 추가",
+        "action": "작업",
+        "sequence": "순서",
+        "name": "메뉴",
+        "key_name": "키",
+        "parent_name": "상위 메뉴",
+        "total": "총계",
+        "item": "항목",
+        "parent_path": "상위 경로"
+    }
+
+
+
+}
