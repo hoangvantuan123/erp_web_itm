@@ -30,6 +30,7 @@
     "dayjs": "^1.11.13",
     "dayjs-plugin-utc": "^0.1.2",
     "dotenv": "^16.4.1",
+    "electron-vite": "^2.3.0",
     "elkjs": "^0.9.3",
     "file-saver": "^2.0.5",
     "handsontable": "^14.6.1",
