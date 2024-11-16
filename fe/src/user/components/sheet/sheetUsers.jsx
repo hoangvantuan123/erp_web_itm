@@ -1,49 +1,61 @@
-import  { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
-import { debounce } from 'lodash';
 
 registerAllModules();
 
-// Hàm tạo dữ liệu trống
-const generateEmptyData = (rows, cols) => {
-  let data = [];
-  for (let i = 0; i < rows; i++) {
-    let row = [];
-    for (let j = 0; j < cols; j++) {
-      row.push('');
-    }
-    data.push(row);
-  }
-  return data;
-};
-
-export default function SheetUsers() {
-  const [data, setData] = useState(generateEmptyData(50, 11)); 
+export default function SheetUsers({ data: propData, onDataChange }) {
+  const [data, setData] = useState(propData); // Đặt dữ liệu từ props
+  const [rowStatus, setRowStatus] = useState(Array(propData.length).fill('A')); // Đặt trạng thái hàng từ dữ liệu ban đầu
+  const colHeaders = ['Họ', 'Tên', 'Họ và Tên', 'Mã nhân viên', 'Số CCCD', 'Ngày vào', 'Phân loại nhân viên', 'Ngày sinh', 'Xưởng', 'Bộ phận', 'Ghi chú'];
   const [loading, setLoading] = useState(false);
   const hotTableRef = useRef(null);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const newData = generateEmptyData(200, 11);
-    setData(newData);
-    setLoading(false);
+  const requiredColumns = useMemo(() => [0, 1, 4, 5, 6], []);
+  const nonEditableColumns = useMemo(() => [2], []);
+
+  // Cập nhật trạng thái hàng khi nhận dữ liệu mới từ props
+  useEffect(() => {
+    if (propData) {
+      setData(propData); // Đặt lại dữ liệu khi nhận props mới
+      setRowStatus(Array(propData.length).fill('A')); // Cập nhật trạng thái cho tất cả các hàng
+    }
+  }, [propData]);
+
+  // Hàm xử lý khi có thay đổi trong bảng
+  const handleAfterChange = (changes, source) => {
+    if (changes && source !== 'loadData') {
+      const updatedData = [...data];
+      const updatedStatus = [...rowStatus];
+
+      changes.forEach(([rowIndex, colIndex, oldValue, newValue]) => {
+        if (newValue !== oldValue) {
+          // Nếu thay đổi dữ liệu của hàng đã có
+          if (updatedStatus[rowIndex] === 'A') {
+            updatedStatus[rowIndex] = 'U'; // Đánh dấu là đã được cập nhật
+          }
+
+          // Nếu thay đổi họ hoặc tên thì cập nhật cột "Họ và Tên"
+          if (colIndex === 0 || colIndex === 1) {
+            updatedData[rowIndex][2] = `${updatedData[rowIndex][0]} ${updatedData[rowIndex][1]}`.trim();
+          }
+        }
+      });
+
+      // Cập nhật trạng thái và dữ liệu
+      setRowStatus(updatedStatus);
+      setData(updatedData);
+
+      // Gọi callback từ props nếu cần
+      if (onDataChange) {
+        onDataChange(updatedData); // Trả lại dữ liệu đã cập nhật
+      }
+    }
   };
 
-  const debouncedSetData = useMemo(
-    () => debounce((newData) => {
-      setData(newData);
-    }, 300),
-    []
-  );
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const viewportRowRenderingOffset = 50; 
-  const viewportColumnRenderingOffset = 5; 
+  const viewportRowRenderingOffset = 50;
+  const viewportColumnRenderingOffset = 5;
 
   return (
     <div>
@@ -51,9 +63,9 @@ export default function SheetUsers() {
 
       <HotTable
         ref={hotTableRef}
-        data={data}
-        rowHeaders
-        colHeaders
+        data={data} // Dữ liệu từ state
+        rowHeaders={(index) => rowStatus[index] || index + 1} // Hiển thị trạng thái hoặc số dòng
+        colHeaders={colHeaders}
         stretchH="all"
         autoWrapRow
         autoWrapCol
@@ -67,7 +79,26 @@ export default function SheetUsers() {
         persistentState={true}
         viewportRowRenderingOffset={viewportRowRenderingOffset}
         viewportColumnRenderingOffset={viewportColumnRenderingOffset}
-        onAfterChange={debouncedSetData} 
+        afterChange={handleAfterChange} // Gọi hàm sau khi thay đổi
+        cells={(row, col) => {
+          const cellProperties = {};
+          if (nonEditableColumns.includes(col)) {
+            cellProperties.readOnly = true;
+            cellProperties.renderer = (instance, td, row, col, prop, value, cellProperties) => {
+              td.style.backgroundColor = '#d3d3d3';
+              td.innerHTML = value;
+              return td;
+            };
+          }
+          return cellProperties;
+        }}
+        afterGetColHeader={(col, TH) => {
+          if (requiredColumns.includes(col)) {
+            TH.style.color = 'red'; // Hiển thị màu đỏ cho các cột bắt buộc
+          } else {
+            TH.style.color = '';
+          }
+        }}
       />
     </div>
   );

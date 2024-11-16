@@ -2,22 +2,81 @@ import { useState, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import { Input, Space, Table, Typography, message, Tabs, Button, DatePicker, Select } from 'antd'
-import { SearchOutlined, SaveOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-const { Search } = Input
-const { Title, Text } = Typography
-const { TabPane } = Tabs
+import { Input, Space, Table, Typography, Tooltip, Tabs, Button, DatePicker, Select, Segmented, Modal } from 'antd'
+import { CloumnIcon } from '../icons'
+import { SearchOutlined, SaveOutlined, DeleteOutlined, PlusOutlined, AppstoreOutlined, BarsOutlined, TableOutlined, FileTextOutlined } from '@ant-design/icons';
 const { RangePicker } = DatePicker;
-import 'moment/locale/vi'
 
-export default function UsersSelectors() {
+export default function UsersSelectors({ keyword, setKeyword, value, setValue, loadingCodeHelp, setIsDrawerVisible, handleSearch, setUmEmpType, dateRange, setDateRange, keyEmIDWord, handleEmpSeqQuery }) {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const handleChange = (value) => {
-        console.log(`selected ${value}`);
+        setUmEmpType(value)
     };
+
+    const handleChangeView = (newValue) => {
+        setValue(newValue);
+    };
+    const handleColumn = () => {
+        setIsDrawerVisible(true)
+    }
+
+
     return (
         <div className="mt-1" >
+            <div
+                className="group p-2 mb-2  bg-white border rounded-lg"
+            >
+                <div className="flex gap-4 justify-between">
+                    <div className="flex gap-4">
+
+                        <Button type="primary" onClick={handleEmpSeqQuery}
+                            icon={<SearchOutlined />} size="middle">
+                            Truy vấn
+                        </Button>
+                        <Button type="default" icon={<SaveOutlined />} size="middle">
+                            Lưu
+                        </Button>
+                        <Button type="primary" danger icon={<DeleteOutlined />} size="middle">
+                            Xóa
+                        </Button>
+                        <Button type="dashed" icon={<PlusOutlined />} size="middle">
+                            Thêm
+                        </Button>
+                    </div>
+                    <div className="flex gap-4">
+                        <Segmented
+                            options={[
+                                {
+                                    label: 'Table',
+                                    value: 'Table',
+                                    icon: <TableOutlined />,
+                                },
+                                {
+                                    label: 'Sheet',
+                                    value: 'Sheet',
+                                    icon: <FileTextOutlined />,
+                                },
+
+                            ]}
+                            size="middle"
+                            value={value}
+                            onChange={handleChangeView}
+                        />
+                        <Button
+                            size="middle"
+                            className="bg-white"
+                            onClick={handleColumn}
+                        >
+                            <CloumnIcon />
+                            Column
+                        </Button>
+                    </div>
+
+                </div>
+
+
+            </div>
             <details
                 className="group p-2 [&_summary::-webkit-details-marker]:hidden  bg-white border rounded-lg"
                 open
@@ -42,42 +101,35 @@ export default function UsersSelectors() {
                     </span>
                 </summary>
                 <div className="flex p-3 gap-4">
-                    <Button type="primary" icon={<SearchOutlined />} size="large">
-                        Truy vấn
-                    </Button>
-                    <Button type="default" icon={<SaveOutlined />} size="large">
-                        Lưu
-                    </Button>
-                    <Button type="primary" danger icon={<DeleteOutlined />} size="large">
-                        Xóa
-                    </Button>
-                    <Button type="dashed" icon={<PlusOutlined />} size="large">
-                        Thêm
-                    </Button>
-                </div>
-                <div className="flex p-3 gap-4">
                     <div className='flex flex-col'>
-                        <label htmlFor="datePicker">Thời gian</label>
-                        <RangePicker id="datePicker" size="large" />
+                        <Tooltip title="Giá trị mặc định là 2024-01-01">
+                            <label htmlFor="datePicker">Thời gian</label>
+                        </Tooltip>
+                        <RangePicker id="datePicker" size="middle" value={dateRange}
+                            onChange={setDateRange} />
                     </div>
 
                     <div className='flex flex-col'>
                         <label htmlFor="typeSelect">Phân loại nhân viên</label>
                         <Select
                             id="typeSelect"
-                            defaultValue="official"
+                            defaultValue="All"
                             style={{
                                 width: 120,
                             }}
-                            size='large'
+                            size="middle"
                             onChange={handleChange}
                             options={[
                                 {
-                                    value: 'official',
+                                    value: 0,
+                                    label: 'All',
+                                },
+                                {
+                                    value: 3059001,
                                     label: 'Official',
                                 },
                                 {
-                                    value: 'seasonal',
+                                    value: 3059002,
                                     label: 'Seasonal',
                                 }
                             ]}
@@ -85,11 +137,35 @@ export default function UsersSelectors() {
                     </div>
                     <div className='flex flex-col'>
                         <label htmlFor="typeSelect">Nhân viên</label>
-                        <Input size="large" />
+                        <Input
+                            size="middle"
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                            placeholder="Tên hoặc mã nhân viên"
+                            className="bg-blue-50"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleSearch();
+                                }
+                            }}
+                            onDoubleClick={handleSearch}
+                        />
                     </div>
+                    <div className='flex flex-col'>
+                        <label htmlFor="typeSelect">Mã nhân viên</label>
+                        <Input
+                            size="middle"
+                            value={keyEmIDWord}
+                            readOnly={true}
+                            placeholder="Mã nhân viên"
+                            className="bg-blue-50"
+                        />
+                    </div>
+
                 </div>
 
             </details>
+
 
         </div>
     )
