@@ -20,6 +20,9 @@ export default function UsersSelectors({ keyword, setKeyword, value, setValue, l
     const handleColumn = () => {
         setIsDrawerVisible(true)
     }
+    const handleOnClickAddLink = () =>{
+        navigate('/u/action=gen-info-1-2/from=add')
+    }
 
 
     return (
@@ -40,7 +43,7 @@ export default function UsersSelectors({ keyword, setKeyword, value, setValue, l
                         <Button type="primary" danger icon={<DeleteOutlined />} size="middle">
                             Xóa
                         </Button>
-                        <Button type="dashed" icon={<PlusOutlined />} size="middle">
+                        <Button type="dashed" onClick={handleOnClickAddLink} icon={<PlusOutlined />} size="middle">
                             Thêm
                         </Button>
                     </div>
@@ -52,11 +55,7 @@ export default function UsersSelectors({ keyword, setKeyword, value, setValue, l
                                     value: 'Table',
                                     icon: <TableOutlined />,
                                 },
-                                {
-                                    label: 'Sheet',
-                                    value: 'Sheet',
-                                    icon: <FileTextOutlined />,
-                                },
+                                
 
                             ]}
                             size="middle"

@@ -15,11 +15,10 @@ export default function SheetUsers({ data: propData, onDataChange }) {
   const requiredColumns = useMemo(() => [0, 1, 4, 5, 6], []);
   const nonEditableColumns = useMemo(() => [2], []);
 
-  // Cập nhật trạng thái hàng khi nhận dữ liệu mới từ props
   useEffect(() => {
     if (propData) {
-      setData(propData); // Đặt lại dữ liệu khi nhận props mới
-      setRowStatus(Array(propData.length).fill('A')); // Cập nhật trạng thái cho tất cả các hàng
+      setData(propData); 
+      setRowStatus(Array(propData.length).fill('A')); 
     }
   }, [propData]);
 
@@ -63,7 +62,7 @@ export default function SheetUsers({ data: propData, onDataChange }) {
 
       <HotTable
         ref={hotTableRef}
-        data={data} // Dữ liệu từ state
+        data={data} 
         rowHeaders={(index) => rowStatus[index] || index + 1} // Hiển thị trạng thái hoặc số dòng
         colHeaders={colHeaders}
         stretchH="all"

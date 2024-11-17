@@ -13,8 +13,10 @@ import Cookies from 'js-cookie'
 import { useTranslation } from 'react-i18next'
 import { checkActionPermission } from '../../permissions'
 import Spinner from '../page/default/load'
+import AddUserSheetDrawer from '../components/add/addUsers'
 
 const Users = lazy(() => import('../page/users/users'))
+
 
 const { Content } = Layout
 
@@ -47,6 +49,16 @@ const UserRouter = () => {
                           <Users permissions={userPermissions} isMobile={isMobile} />
                         ) : (
                           <Users permissions={userPermissions} isMobile={isMobile} />
+                        )
+                      }
+                    />
+                    <Route
+                      path="u/action=gen-info-1-2/from=add"
+                      element={
+                        checkActionPermission(userPermissions, '', '') ? (
+                          <AddUserSheetDrawer permissions={userPermissions} isMobile={isMobile} />
+                        ) : (
+                          <AddUserSheetDrawer permissions={userPermissions} isMobile={isMobile} />
                         )
                       }
                     />
