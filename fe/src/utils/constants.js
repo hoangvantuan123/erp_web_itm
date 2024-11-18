@@ -18,7 +18,9 @@ export const ERROR_MESSAGES = {
   ERROR: "An error occurred.",
   ERROR_CSV: "An error occurred while loading the CSV file.",
   ERROR_XLSX: "An error occurred while loading the Excel file.",
-  ERROR_CSV_EXCEL: "Only supports uploading CSV or Excel files."
+  ERROR_CSV_EXCEL: "Only supports uploading CSV or Excel files.",
+  ERROR_FE: "An error occurred on the user side.",
+  ERROR_NULL_DATA: "No records to save"
 }
 
 export const SUCCESS_MESSAGES = {
@@ -28,7 +30,9 @@ export const SUCCESS_MESSAGES = {
   API_CALL_SUCCEEDED: 'API call completed successfully.',
   DATABASE_QUERY_SUCCEEDED: 'Database query executed successfully.',
   DATA_LOAD: "Loading data...",
-  XLSX_DATA: "Excel file exported successfully!"
+  XLSX_DATA: "Excel file exported successfully!",
+  DELETE_DATA: "Data deletion successful.",
+
 };
 
 

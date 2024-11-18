@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { checkActionPermission } from '../../permissions'
 import Spinner from '../page/default/load'
 import AddUserSheetDrawer from '../components/add/addUsers'
+import InfoUser from '../page/users/user'
 
 const Users = lazy(() => import('../page/users/users'))
 
@@ -59,6 +60,17 @@ const UserRouter = () => {
                           <AddUserSheetDrawer permissions={userPermissions} isMobile={isMobile} />
                         ) : (
                           <AddUserSheetDrawer permissions={userPermissions} isMobile={isMobile} />
+                        )
+                      }
+                    />
+
+                    <Route
+                      path="u/action=gen-info-1-2/from=detail/user/:id"
+                      element={
+                        checkActionPermission(userPermissions, '', '') ? (
+                          <InfoUser permissions={userPermissions} isMobile={isMobile} />
+                        ) : (
+                          <InfoUser permissions={userPermissions} isMobile={isMobile} />
                         )
                       }
                     />

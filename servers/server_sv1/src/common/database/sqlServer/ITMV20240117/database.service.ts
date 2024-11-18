@@ -31,4 +31,19 @@ export class DatabaseService {
       throw error;
     }
   }
+
+  async executeQueryTest(query: string): Promise<any> {
+    try {
+      const result = await this.queryRunner.query(query);
+
+      if (Array.isArray(result)) {
+        return result;
+      }
+
+      return { message: 'Query executed successfully', result: result };
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }

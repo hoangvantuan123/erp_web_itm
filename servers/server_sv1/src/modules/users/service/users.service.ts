@@ -3,11 +3,12 @@
 import { Injectable } from '@nestjs/common';
 import { SimpleQueryResult } from 'src/common/interfaces/simple-query-result.interface';
 import { DatabaseService } from 'src/common/database/sqlServer/ITMV20240117/database.service';
+import { GenerateXmlService } from '../generate-xml/generate-xml.service';
 import { ERROR_MESSAGES } from 'src/common/utils/constants';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly databaseService: DatabaseService) { }
+  constructor(private readonly databaseService: DatabaseService, private readonly generateXmlService: GenerateXmlService) { }
 
   async _SHREmpInQuery(
     xmlDocument: string,
@@ -108,4 +109,58 @@ export class UsersService {
       return { success: false, message: ERROR_MESSAGES.DATABASE_ERROR };
     }
   }
+
+
+
+  async _SHREmpInSave(result: any[], xmlFlags: number, serviceSeq: number, workingTag: string, companySeq: number, languageSeq: number, userSeq: number, pgmSeq: number): Promise<SimpleQueryResult> {
+    const xmlDocument = await this.generateXmlService.generateUsersXml(result);
+    const query = `
+      EXEC _SHREmpInSave
+        @xmlDocument = N'${xmlDocument}',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: error.message || ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+
+  async _SHREmpInCheck(xmlDocument: string, xmlFlags: number, serviceSeq: number, workingTag: string, companySeq: number, languageSeq: number, userSeq: number, pgmSeq: number): Promise<SimpleQueryResult> {
+    const escapedXmlDocument = xmlDocument.replace(/'/g, "''");
+    const query = `
+      EXEC dbo._SHREmpInCheck
+        @xmlDocument = N'<ROOT> ${escapedXmlDocument} </ROOT>',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      const hasInvalidEmpSeq = result.some((item: any) => item.EmpSeq === 0);
+      
+      if (hasInvalidEmpSeq) {
+        return { success: false, message: ERROR_MESSAGES.ERROR_DUP };
+      }
+
+      await this._SHREmpInSave(result, xmlFlags, serviceSeq, workingTag, companySeq, languageSeq, userSeq, pgmSeq);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: error.message || ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+
+
+
 }

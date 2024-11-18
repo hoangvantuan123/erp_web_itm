@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { Input, Space, Table, Typography, Tooltip, Tabs, Button, DatePicker, Select, Segmented, Modal } from 'antd'
 import { CloumnIcon } from '../icons'
-import { SearchOutlined, SaveOutlined, DeleteOutlined, PlusOutlined, AppstoreOutlined, BarsOutlined, TableOutlined, FileTextOutlined } from '@ant-design/icons';
+import { SearchOutlined, SaveOutlined, DeleteOutlined, PlusOutlined, UserOutlined, BarsOutlined, TableOutlined, FileTextOutlined } from '@ant-design/icons';
 const { RangePicker } = DatePicker;
 
-export default function UsersSelectors({ keyword, setKeyword, value, setValue, loadingCodeHelp, setIsDrawerVisible, handleSearch, setUmEmpType, dateRange, setDateRange, keyEmIDWord, handleEmpSeqQuery }) {
+export default function UsersSelectors({ handleDeleteDebounced, keyword, setKeyword, value, setValue, loadingCodeHelp, setIsDrawerVisible, handleSearch, setUmEmpType, dateRange, setDateRange, keyEmIDWord, handleEmpSeqQuery }) {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const handleChange = (value) => {
@@ -20,7 +20,7 @@ export default function UsersSelectors({ keyword, setKeyword, value, setValue, l
     const handleColumn = () => {
         setIsDrawerVisible(true)
     }
-    const handleOnClickAddLink = () =>{
+    const handleOnClickAddLink = () => {
         navigate('/u/action=gen-info-1-2/from=add')
     }
 
@@ -40,12 +40,13 @@ export default function UsersSelectors({ keyword, setKeyword, value, setValue, l
                         <Button type="default" icon={<SaveOutlined />} size="middle">
                             Lưu
                         </Button>
-                        <Button type="primary" danger icon={<DeleteOutlined />} size="middle">
+                        <Button type="primary" danger icon={<DeleteOutlined />} size="middle" onClick={handleDeleteDebounced}>
                             Xóa
                         </Button>
                         <Button type="dashed" onClick={handleOnClickAddLink} icon={<PlusOutlined />} size="middle">
                             Thêm
                         </Button>
+                      
                     </div>
                     <div className="flex gap-4">
                         <Segmented
@@ -55,8 +56,6 @@ export default function UsersSelectors({ keyword, setKeyword, value, setValue, l
                                     value: 'Table',
                                     icon: <TableOutlined />,
                                 },
-                                
-
                             ]}
                             size="middle"
                             value={value}

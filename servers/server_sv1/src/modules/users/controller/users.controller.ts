@@ -77,4 +77,31 @@ export class EmployeeController {
         );
     }
 
+
+
+
+    @Post('SHREmpInCheck')
+    async processSHREmpInCheck(@Body() body: any): Promise<SimpleQueryResult> {
+        const {
+            xmlDocument,
+            xmlFlags,
+            serviceSeq,
+            workingTag,
+            companySeq,
+            languageSeq,
+            userSeq,
+            pgmSeq,
+        } = body;
+        return this.usersService._SHREmpInCheck(
+            xmlDocument,
+            xmlFlags,
+            serviceSeq,
+            workingTag,
+            companySeq,
+            languageSeq,
+            userSeq,
+            pgmSeq,
+        );
+    }
+
 }

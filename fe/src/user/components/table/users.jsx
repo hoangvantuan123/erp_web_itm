@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -49,17 +50,23 @@ const columnDefs = [
     { field: 'Remark', headerName: 'Ghi chú', sortable: true, filter: true }
 ];
 
-export default function TableUsers({ data }) {
+export default function TableUsers({ data, setSelectedEmpIDs }) {
     const [gridApi, setGridApi] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
-
+    const navigate = useNavigate()
     const onGridReady = (params) => {
         setGridApi(params.api);
         setGridColumnApi(params.columnApi);
     };
-
+    const onSelectionChanged = () => {
+        if (gridApi) {
+            const selectedNodes = gridApi.getSelectedNodes();
+            const selectedIds = selectedNodes.map(node => node.data);
+            setSelectedEmpIDs(selectedIds);
+        }
+    };
     const onRowClicked = (event) => {
-        /* console.log('Thông tin hàng:', event.data); */
+        navigate(`/u/action=gen-info-1-2/from=detail/user/${event.data.EmpSeq}`)
     };
 
     const defaultColDef = useMemo(() => ({
@@ -69,16 +76,17 @@ export default function TableUsers({ data }) {
     }), []);
 
     return (
-        <div className="ag-theme-quartz h-full">
+        <div className="ag-theme-quartz h-full cursor-pointer">
             <AgGridReact
                 rowData={data}
                 columnDefs={columnDefs}
                 defaultColDef={defaultColDef}
                 onGridReady={onGridReady}
-                onRowClicked={onRowClicked}
+                onRowDoubleClicked={onRowClicked}
                 rowSelection="multiple"
                 pagination={true}
                 paginationPageSize={1000}
+                onSelectionChanged={onSelectionChanged}
             />
         </div>
     );

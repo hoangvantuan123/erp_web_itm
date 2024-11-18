@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 import UsersSelectors from '../../components/selector/usersSelector';
@@ -8,8 +8,10 @@ import TableUsers from '../../components/table/users';
 import Spinner from '../default/load';
 import { SHREmpInQuery } from '../../../features/users/SHREmpInQuery';
 import { SCACodeHelpQuery } from '../../../features/users/SCACodeHelpQuery';
+import { SHREmpInCheck } from '../../../features/users/SHREmpInCheck';
 import CodeHelpAddUsers from '../../components/modal/codeHelpUsers';
-
+import { SUCCESS_MESSAGES, ERROR_MESSAGES } from '../../../utils/constants';
+import { debounce } from 'lodash';
 const { Content } = Layout;
 const SheetUsers = lazy(() => import('../../components/sheet/sheetUsers'));
 
@@ -31,13 +33,18 @@ export default function Users({ permissions, isMobile }) {
   const [conditionSeq, setConditionSeq] = useState(1)
   const [dateRange, setDateRange] = useState([null, null]);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [selectedEmpIDs, setSelectedEmpIDs] = useState([]);
+  let today = new Date();
+  let year = today.getFullYear();
+  let month = (today.getMonth() + 1).toString().padStart(2, '0');
+  let day = today.getDate().toString().padStart(2, '0');
+  let formattedDate = `${year}${month}${day}`;
   const [startDate, endDate] = Array.isArray(dateRange) && dateRange.length === 2
     ? dateRange.map((date, index) => {
       if (date) {
         return date.format('YYYYMMDD');
       } else {
-        return index === 0 ? '20240101' : '';
+        return index === 0 ? formattedDate : '';
       }
     })
     : [null, null];
@@ -134,12 +141,66 @@ export default function Users({ permissions, isMobile }) {
         });
     }
   };
+
+
+
+  const handleDeleteDebounced = useCallback(debounce(() => {
+    const xmlData = selectedEmpIDs.map((row, index) => {
+      return `
+        <DataBlock1>
+          <WorkingTag>D</WorkingTag>
+          <IDX_NO>${index + 1}</IDX_NO>
+          <DataSeq>${index + 1}</DataSeq>
+          <Status>0</Status>
+          <Selected>0</Selected>
+          <EmpFamilyName>${row.EmpFamilyName}</EmpFamilyName>
+          <EmpFirstName>${row.EmpFirstName}</EmpFirstName>
+          <EmpName>${row.EmpName}</EmpName>
+          <EmpSeq>${row.EmpSeq}</EmpSeq>
+          <EmpID>${row.EmpID}</EmpID>
+          <ResidID>${row.ResidID}</ResidID>
+          <EntDate>${row.EntDate}</EntDate>
+          <UMEmpType>${row.UMEmpType}</UMEmpType>
+          <EmpChnName>${row.EmpChnName}</EmpChnName>
+          <EmpEngFirstName>${row.EmpEngFirstName}</EmpEngFirstName>
+          <EmpEngLastName>${row.EmpEngLastName}</EmpEngLastName>
+          <Remark>${row.Remark}</Remark>
+          <TABLE_NAME>DataBlock1</TABLE_NAME>
+        </DataBlock1>
+      `;
+    }).join('\n');
+
+
+    const workingTag = 'D'
+    SHREmpInCheck(xmlData, workingTag)
+      .then((req => {
+        if (req.success === true) {
+          message.success(SUCCESS_MESSAGES.DELETE_DATA);
+          SHREmpInQuery(formData)
+            .then(response => {
+              setData(response.data);
+              setLoading(false);
+            })
+            .catch(error => {
+              setLoading(false);
+            });
+        } else {
+          message.error(req.message);
+        }
+      }))
+      .catch((err) => {
+        message.error(ERROR_MESSAGES.ERROR_FE);
+      });
+  }, 300), [selectedEmpIDs]);
+
+
+
   const content = useMemo(() => {
     if (loading) {
       return <Spinner />;
     }
     return value === "Table"
-      ? <TableUsers isDrawerVisible={isDrawerVisible} data={data} loading={loading} setIsDrawerVisible={setIsDrawerVisible} />
+      ? <TableUsers isDrawerVisible={isDrawerVisible} data={data} loading={loading} setIsDrawerVisible={setIsDrawerVisible} setSelectedEmpIDs={setSelectedEmpIDs} />
       : dataLoaded && (
         <Suspense fallback={<Spinner />}>
           <SheetUsers data={data} loading={loading} />
@@ -170,6 +231,7 @@ export default function Users({ permissions, isMobile }) {
           keyEmIDWord={keyEmIDWord}
           setConditionSeq={setConditionSeq}
           handleEmpSeqQuery={handleEmpSeqQuery}
+          handleDeleteDebounced={handleDeleteDebounced}
         />
       </div>
       <Layout className="p-2 bg-slate-50">

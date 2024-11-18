@@ -27,7 +27,8 @@ export const ERROR_MESSAGES = {
   MULTIPLE_QUERIES: "Error executing multiple queries",
   EXECUTING_QUERY: "Error executing query",
   DATABASE_ERROR: "Error executing database",
-  ERROR_ITMV20240117: "Failed to connect to the database ITMV20240117."
+  ERROR_ITMV20240117: "Failed to connect to the database ITMV20240117.",
+  ERROR_DUP: "An error occurred, please review the data."
 };
 
 

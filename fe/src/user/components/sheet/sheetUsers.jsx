@@ -30,7 +30,6 @@ export default function SheetUsers({ data: propData, onDataChange }) {
 
       changes.forEach(([rowIndex, colIndex, oldValue, newValue]) => {
         if (newValue !== oldValue) {
-          // Nếu thay đổi dữ liệu của hàng đã có
           if (updatedStatus[rowIndex] === 'A') {
             updatedStatus[rowIndex] = 'U'; // Đánh dấu là đã được cập nhật
           }
@@ -46,7 +45,6 @@ export default function SheetUsers({ data: propData, onDataChange }) {
       setRowStatus(updatedStatus);
       setData(updatedData);
 
-      // Gọi callback từ props nếu cần
       if (onDataChange) {
         onDataChange(updatedData); // Trả lại dữ liệu đã cập nhật
       }
@@ -63,7 +61,7 @@ export default function SheetUsers({ data: propData, onDataChange }) {
       <HotTable
         ref={hotTableRef}
         data={data} 
-        rowHeaders={(index) => rowStatus[index] || index + 1} // Hiển thị trạng thái hoặc số dòng
+        rowHeaders={(index) => rowStatus[index] || index + 1} 
         colHeaders={colHeaders}
         stretchH="all"
         autoWrapRow
