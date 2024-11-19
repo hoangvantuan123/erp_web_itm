@@ -34,6 +34,7 @@ export default function Users({ permissions, isMobile }) {
   const [dateRange, setDateRange] = useState([null, null]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedEmpIDs, setSelectedEmpIDs] = useState([]);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   let today = new Date();
   let year = today.getFullYear();
   let month = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -145,6 +146,12 @@ export default function Users({ permissions, isMobile }) {
 
 
   const handleDeleteDebounced = useCallback(debounce(() => {
+    if (selectedEmpIDs.length === 0) {
+      message.warning('Chưa có nhân viên nào để xóa.');
+      return;
+    }
+    const loadingMessage = message.loading('Đang xóa...', 0);
+
     const xmlData = selectedEmpIDs.map((row, index) => {
       return `
         <DataBlock1>
@@ -170,26 +177,32 @@ export default function Users({ permissions, isMobile }) {
       `;
     }).join('\n');
 
+    const workingTag = 'D';
 
-    const workingTag = 'D'
     SHREmpInCheck(xmlData, workingTag)
-      .then((req => {
+      .then((req) => {
         if (req.success === true) {
+          loadingMessage();
           message.success(SUCCESS_MESSAGES.DELETE_DATA);
           SHREmpInQuery(formData)
             .then(response => {
               setData(response.data);
-              setLoading(false);
+              setLoadingDelete(false);
             })
             .catch(error => {
-              setLoading(false);
+              setLoadingDelete(false);
+              message.error(ERROR_MESSAGES.ERROR_FE);
             });
         } else {
+          loadingMessage();
           message.error(req.message);
+          setLoadingDelete(false);
         }
-      }))
+      })
       .catch((err) => {
+        loadingMessage();
         message.error(ERROR_MESSAGES.ERROR_FE);
+        setLoadingDelete(false);
       });
   }, 300), [selectedEmpIDs]);
 

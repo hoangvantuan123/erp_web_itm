@@ -29,6 +29,7 @@ export class EmployeeController {
             pgmSeq,
         );
     }
+
     @Post('SCACodeHelpQuery')
     async processSCACodeHelpQuery(@Body() body: any): Promise<SimpleQueryResult> {
         const {
@@ -103,5 +104,60 @@ export class EmployeeController {
             pgmSeq,
         );
     }
+
+
+
+    @Post('SHREmpInfoQuery')
+    async processSHREmpInfoQuery(@Body() body: any): Promise<SimpleQueryResult> {
+        const {
+            xmlDocument,
+            xmlFlags,
+            serviceSeq,
+            workingTag,
+            companySeq,
+            languageSeq,
+            userSeq,
+            pgmSeq,
+        } = body;
+        return this.usersService.SHREmpInfoQuery(
+            xmlDocument,
+            xmlFlags,
+            serviceSeq,
+            workingTag,
+            companySeq,
+            languageSeq,
+            userSeq,
+            pgmSeq,
+        );
+    }
+
+
+    @Post('SHRBasEmpPhotoQuery')
+    async processSHRBasEmpPhotoQuery(@Body() body: any): Promise<SimpleQueryResult> {
+        const {
+            xmlDocument,
+            xmlFlags,
+            serviceSeq,
+            workingTag,
+            companySeq,
+            languageSeq,
+            userSeq,
+            pgmSeq,
+        } = body;
+        return this.usersService.SHRBasEmpPhotoQuery(
+            xmlDocument,
+            xmlFlags,
+            serviceSeq,
+            workingTag,
+            companySeq,
+            languageSeq,
+            userSeq,
+            pgmSeq,
+        );
+    }
+
+
+
+
 
 }

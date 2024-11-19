@@ -149,7 +149,7 @@ export class UsersService {
     try {
       const result = await this.databaseService.executeQuery(query);
       const hasInvalidEmpSeq = result.some((item: any) => item.EmpSeq === 0);
-      
+
       if (hasInvalidEmpSeq) {
         return { success: false, message: ERROR_MESSAGES.ERROR_DUP };
       }
@@ -158,6 +158,169 @@ export class UsersService {
       return { success: true, data: result };
     } catch (error) {
       return { success: false, message: error.message || ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+
+
+
+  async SHREmpInfoQuery(
+    xmlDocument: string,
+    xmlFlags: number,
+    serviceSeq: number,
+    workingTag: string,
+    companySeq: number,
+    languageSeq: number,
+    userSeq: number,
+    pgmSeq: number,
+  ): Promise<SimpleQueryResult> {
+    const escapedXmlDocument = xmlDocument.replace(/'/g, "''");
+
+    const query = `
+      EXEC dbo._SHREmpInfoQuery
+        @xmlDocument = N'${escapedXmlDocument}',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+  async SHRBasEmpPhotoQuery(
+    xmlDocument: string,
+    xmlFlags: number,
+    serviceSeq: number,
+    workingTag: string,
+    companySeq: number,
+    languageSeq: number,
+    userSeq: number,
+    pgmSeq: number,
+  ): Promise<SimpleQueryResult> {
+    const escapedXmlDocument = xmlDocument.replace(/'/g, "''");
+
+    const query = `
+      EXEC dbo._SHRBasEmpPhotoQuery
+        @xmlDocument = N'${escapedXmlDocument}',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+
+
+
+  async SHREmpDateQuery(
+    xmlDocument: string,
+    xmlFlags: number,
+    serviceSeq: number,
+    workingTag: string,
+    companySeq: number,
+    languageSeq: number,
+    userSeq: number,
+    pgmSeq: number,
+  ): Promise<SimpleQueryResult> {
+    const escapedXmlDocument = xmlDocument.replace(/'/g, "''");
+
+    const query = `
+      EXEC dbo._SHREmpDateQuery
+        @xmlDocument = N'${escapedXmlDocument}',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+
+
+  async SHREmpOneQuery(
+    xmlDocument: string,
+    xmlFlags: number,
+    serviceSeq: number,
+    workingTag: string,
+    companySeq: number,
+    languageSeq: number,
+    userSeq: number,
+    pgmSeq: number,
+  ): Promise<SimpleQueryResult> {
+    const escapedXmlDocument = xmlDocument.replace(/'/g, "''");
+    const query = `
+      EXEC dbo._SHREmpOneQuery
+        @xmlDocument = N'${escapedXmlDocument}',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: ERROR_MESSAGES.DATABASE_ERROR };
+    }
+  }
+
+  async _SHRBasFamilyQuery(
+    xmlDocument: string,
+    xmlFlags: number,
+    serviceSeq: number,
+    workingTag: string,
+    companySeq: number,
+    languageSeq: number,
+    userSeq: number,
+    pgmSeq: number,
+  ): Promise<SimpleQueryResult> {
+    const escapedXmlDocument = xmlDocument.replace(/'/g, "''");
+
+    const query = `
+      EXEC dbo._SHRBasFamilyQuery
+        @xmlDocument = N'${escapedXmlDocument}',
+        @xmlFlags = ${xmlFlags},
+        @ServiceSeq = ${serviceSeq},
+        @WorkingTag = N'${workingTag}',
+        @CompanySeq = ${companySeq},
+        @LanguageSeq = ${languageSeq},
+        @UserSeq = ${userSeq},
+        @PgmSeq = ${pgmSeq};
+    `;
+
+    try {
+      const result = await this.databaseService.executeQuery(query);
+      return { success: true, data: result };
+    } catch (error) {
+      return { success: false, message: ERROR_MESSAGES.DATABASE_ERROR };
     }
   }
 

@@ -23,8 +23,6 @@ export default function UsersSelectors({ handleDeleteDebounced, keyword, setKeyw
     const handleOnClickAddLink = () => {
         navigate('/u/action=gen-info-1-2/from=add')
     }
-
-
     return (
         <div className="mt-1" >
             <div
@@ -37,16 +35,13 @@ export default function UsersSelectors({ handleDeleteDebounced, keyword, setKeyw
                             icon={<SearchOutlined />} size="middle">
                             Truy vấn
                         </Button>
-                        <Button type="default" icon={<SaveOutlined />} size="middle">
-                            Lưu
-                        </Button>
                         <Button type="primary" danger icon={<DeleteOutlined />} size="middle" onClick={handleDeleteDebounced}>
                             Xóa
                         </Button>
                         <Button type="dashed" onClick={handleOnClickAddLink} icon={<PlusOutlined />} size="middle">
                             Thêm
                         </Button>
-                      
+
                     </div>
                     <div className="flex gap-4">
                         <Segmented
@@ -56,19 +51,16 @@ export default function UsersSelectors({ handleDeleteDebounced, keyword, setKeyw
                                     value: 'Table',
                                     icon: <TableOutlined />,
                                 },
+                               /*  {
+                                    label: 'Sheet',
+                                    value: 'Sheet',
+                                    icon: <FileTextOutlined />,
+                                }, */
                             ]}
                             size="middle"
                             value={value}
                             onChange={handleChangeView}
                         />
-                        <Button
-                            size="middle"
-                            className="bg-white"
-                            onClick={handleColumn}
-                        >
-                            <CloumnIcon />
-                            Column
-                        </Button>
                     </div>
 
                 </div>

@@ -12,6 +12,8 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../../utils/constants';
 registerAllModules();
 
 export default function AddUserSheetDrawer({ data: propData, onDataChange }) {
+  const MAX_ROWS = 10000;
+ 
   const colHeaders = ['Họ', 'Tên', 'Mã nhân viên', 'Số CCCD', 'Ngày vào', 'Phân loại nhân viên', 'Ngày sinh', 'Xưởng', 'Bộ phận', 'Ghi chú'];
   const navigate = useNavigate()
   const createEmptyData = () => Array(20).fill().map(() => Array(colHeaders.length).fill(''));
@@ -21,6 +23,7 @@ export default function AddUserSheetDrawer({ data: propData, onDataChange }) {
   const requiredColumns = useMemo(() => [0, 1, 3, 4, 5], []);
   const hotTableRef = useRef(null);
   const isSampleRow = (row) => row.every(cell => cell === '' || cell === null);
+  const limitedData = data.slice(0, MAX_ROWS);
 
   const validateRowData = (row, rowIndex) => {
     const missingColumns = requiredColumns.filter(colIndex => typeof row[colIndex] !== 'string' || row[colIndex].trim() === '');
@@ -166,7 +169,7 @@ export default function AddUserSheetDrawer({ data: propData, onDataChange }) {
 
       <HotTable
         ref={hotTableRef}
-        data={data}
+        data={limitedData}
         colHeaders={colHeaders}
         rowHeaders="A"
         stretchH="all"
