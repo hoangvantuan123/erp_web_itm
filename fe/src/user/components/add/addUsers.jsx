@@ -13,7 +13,7 @@ registerAllModules();
 
 export default function AddUserSheetDrawer({ data: propData, onDataChange }) {
   const MAX_ROWS = 10000;
- 
+
   const colHeaders = ['Họ', 'Tên', 'Mã nhân viên', 'Số CCCD', 'Ngày vào', 'Phân loại nhân viên', 'Ngày sinh', 'Xưởng', 'Bộ phận', 'Ghi chú'];
   const navigate = useNavigate()
   const createEmptyData = () => Array(20).fill().map(() => Array(colHeaders.length).fill(''));
@@ -148,6 +148,20 @@ export default function AddUserSheetDrawer({ data: propData, onDataChange }) {
       callback(value !== '');
     }
   };
+  columns[4] = {
+    type: 'date',
+    dateFormat: 'YYYYMMDD',  
+    correctFormat: true,
+    defaultDate: new Date().toLocaleDateString('en-US'),  
+    datePickerConfig: {
+      firstDay: 0,  
+      showWeekNumber: true,  
+      disableDayFn(date) {
+        return date.getDay() === 0 || date.getDay() === 6;  
+      },
+    },
+  };
+
 
   const handleNavigateToDetail = () => {
     navigate(`/u/action=gen-info-1-2/from=view`)

@@ -2,7 +2,6 @@ import { Button, Form, Input, Select, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message } from 'antd'
-
 const { Title } = Typography
 const { Option } = Select
 
@@ -39,9 +38,8 @@ export default function KeyMenu02() {
         onFinish={onFinish}
         autoComplete="off"
         layout="vertical"
-        initialValues={{ email, language, timezone }} // Set giá trị ban đầu
+        initialValues={{ email, language, timezone }} 
       >
-        {/* Phương thức xử lý thông báo */}
         <Title level={5}>
           {t('personal_settings_key_menu_02.notification_method')}
         </Title>
