@@ -248,7 +248,7 @@ export default function Users({ permissions, isMobile }) {
         />
       </div>
       <Layout className="p-2 bg-slate-50">
-        <Content className="flex-1 h-screen overflow-auto bg-slate-50">
+        <Content className="flex-1  bg-slate-50">
           {content}
         </Content>
       </Layout>

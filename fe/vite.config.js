@@ -1,7 +1,5 @@
-import {
-  defineConfig
-} from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   server: {
@@ -12,6 +10,8 @@ export default defineConfig({
   esbuild: {
     jsxFactory: 'React.createElement',
     jsxInject: `import React from 'react'`,
-  }
-
-})
+  },
+  optimizeDeps: {
+    include: ['tui-grid'],
+  },
+});

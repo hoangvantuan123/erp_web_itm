@@ -1,93 +1,67 @@
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom'
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
+import 'tui-grid/dist/tui-grid.css';
+import Grid from '@toast-ui/react-grid';
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import UMEmpType from '../tags/UMEmpType';
 
-const columnDefs = [
-    {
-        headerCheckboxSelection: true,
-        checkboxSelection: true,
-    },
-    {
-        headerName: 'STT',
-        valueGetter: 'node.rowIndex + 1',
-        sortable: false,
-        filter: false,
-        width: 100,
-    },
+function TableUsers({ data }) {
+    const navigate = useNavigate();
 
-    { field: 'EmpFamilyName', headerName: 'Họ', sortable: true, filter: true },
-    { field: 'EmpFirstName', headerName: 'Tên', sortable: true, filter: true },
-    { field: 'EmpName', headerName: 'Họ và Tên', sortable: true, filter: true },
-    { field: 'EmpID', headerName: 'Mã nhân viên', sortable: true, filter: true },
-    { field: 'ResidID', headerName: 'ResidID', sortable: true, filter: true },
-    {
-        field: 'EntDate',
-        headerName: 'Ngày gia nhập',
-        sortable: true,
-        filter: true,
-        valueFormatter: (params) => params.value ? moment(params.value, 'YYYYMMDD').format('DD-MM-YYYY') : ''
-    },
-    {
-        field: 'UMEmpType',
-        headerName: 'Loại nhân viên',
-        sortable: true,
-        filter: true,
-        cellRenderer: (params) => <UMEmpType status={params.value} />
-    },
-    {
-        field: 'BirthDate',
-        headerName: 'Ngày sinh',
-        sortable: true,
-        filter: true,
-        valueFormatter: (params) => params.value ? moment(params.value, 'YYYYMMDD').format('DD-MM-YYYY') : ''
-    },
-    { field: 'EmpEngFirstName', headerName: 'EmpEngFirstName', sortable: true, filter: true },
-    { field: 'EmpEngLastName', headerName: 'EmpEngLastName', sortable: true, filter: true },
-    { field: 'Remark', headerName: 'Ghi chú', sortable: true, filter: true }
-];
+    const columns = [
+        { name: 'EmpFamilyName', header: 'Họ', align: 'center', sortable: true },
+        { name: 'EmpFirstName', header: 'Tên', align: 'center', sortable: true },
+        { name: 'EmpName', header: 'Họ và Tên', align: 'center', sortable: true },
+        { name: 'EmpID', header: 'Mã nhân viên', align: 'center', sortable: true },
+        { name: 'ResidID', header: 'ResidID', align: 'center', sortable: true },
+        {
+            name: 'EntDate',
+            header: 'Ngày gia nhập',
+            align: 'center',
+            sortable: true,
+            formatter: ({ value }) => value ? moment(value, 'YYYYMMDD').format('DD-MM-YYYY') : ''
+        },
+        {
+            name: 'UMEmpType',
+            header: 'Loại nhân viên',
+            align: 'center',
+            sortable: true,
+        },
+        {
+            name: 'BirthDate',
+            header: 'Ngày sinh',
+            align: 'center',
+            sortable: true,
+            formatter: ({ value }) => value ? moment(value, 'YYYYMMDD').format('DD-MM-YYYY') : ''
+        },
+        { name: 'EmpEngFirstName', header: 'Tên Tiếng Anh', align: 'center', sortable: true },
+        { name: 'EmpEngLastName', header: 'Họ Tiếng Anh', align: 'center', sortable: true },
+        { name: 'Remark', header: 'Ghi chú', align: 'center', sortable: true }
+    ];
 
-export default function TableUsers({ data, setSelectedEmpIDs }) {
-    const [gridApi, setGridApi] = useState(null);
-    const [gridColumnApi, setGridColumnApi] = useState(null);
-    const navigate = useNavigate()
-    const onGridReady = (params) => {
-        setGridApi(params.api);
-        setGridColumnApi(params.columnApi);
-    };
-    const onSelectionChanged = () => {
-        if (gridApi) {
-            const selectedNodes = gridApi.getSelectedNodes();
-            const selectedIds = selectedNodes.map(node => node.data);
-            setSelectedEmpIDs(selectedIds);
-        }
-    };
-    const onRowClicked = (event) => {
-        navigate(`/u/action=gen-info-1-2/from=detail/user/${event.data.EmpSeq}`)
-    };
 
-    const defaultColDef = useMemo(() => ({
-        resizable: true,
-        flex: 1,
-        minWidth: 100,
-    }), []);
+    const handleRowDoubleClick = (e) => {
+        const { rowKey } = e;
+        const clickedRowData = e.instance.getRow(rowKey);
+        console.log('Double click - Dữ liệu hàng:', clickedRowData);
+    };
 
     return (
-        <div className="ag-theme-quartz h-full cursor-pointer">
-            <AgGridReact
-                rowData={data}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                onGridReady={onGridReady}
-                onRowDoubleClicked={onRowClicked}
-                rowSelection="multiple"
-                pagination={true}
-                paginationPageSize={1000}
-                onSelectionChanged={onSelectionChanged}
+        <div className="w-full h-full">
+            <Grid
+                data={data}
+                columns={columns}
+                rowHeight={20}
+                bodyHeight="fitToParent"
+                onDblclick={handleRowDoubleClick}
+                rowHeaders={['rowNum']}
+                pagination={{
+                    perPage: 100,
+                }}
+                heightResizable={true}
             />
         </div>
     );
 }
+
+export default TableUsers;
+
